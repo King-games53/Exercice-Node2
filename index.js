@@ -1,6 +1,7 @@
+const fs = require('fs');
+const path = require('path');
 const ArgumentParser = require('argparse').ArgumentParser;
-const fs = require ('fs');
-const path = require ('path');
+
 const parser = new ArgumentParser({
     version: '0.0.1',
     addHelp: true,
@@ -10,7 +11,7 @@ const parser = new ArgumentParser({
 parser.addArgument(
     [ '-p', '--port' ],
     {
-        help: 'Port'
+        help: 'Port of server'
     }
 );
 
@@ -22,9 +23,9 @@ parser.addArgument(
 );
 
 parser.addArgument(
-    ['--protocol' ],
+    [ '--protocol' ],
     {
-        help: 'Protocl (ex: http)'
+        help: 'Protocol of server'
     }
 );
 
@@ -34,17 +35,35 @@ args.port = args.port || '8080';
 args.host = args.host || 'localhost';
 args.protocol = args.protocol || 'http';
 
-const sampleConfigPathFile=
+const sampleConfigPathFile = path.join(__dirname, 'sample.config.json');
+const configPathFile = path.join(__dirname, 'config.json');
 
-const configs = fs.readFile('SampleConfig.json', "utf8");
-
-
-Object.keys(args).forEach(key => {
-    constentSampleFile = constentSampleFile.replace(key.)
-})
-
-
-fs.writeFile(csvFile, string, (err) => {
+fs.readFile(sampleConfigPathFile, 'utf8', (err, contentSampleFile) => {
     if (err) throw err;
-console.log('The file has been saved!');
+    // First
+    // contentSampleFile = contentSampleFile.replace("PORT", args.port)
+    //     .replace("HOST", args.host)
+    //     .replace("PROTOCOL", args.protocol);
+    // console.log(contentSampleFile);
+
+    // Second
+    // const objConfig = JSON.parse(contentSampleFile);
+    //
+    // objConfig.port = args.port;
+    // objConfig.host = args.host;
+    // objConfig.protocol = args.protocol;
+    //
+    // console.log(JSON.stringify(objConfig));
+
+    // Par tableau associatif ["port", "host", "protocol"]
+    Object.keys(args).forEach(key => {
+        contentSampleFile = contentSampleFile.replace(key.toUpperCase(), args[key])
+    });
+
+    fs.writeFile(configPathFile, contentSampleFile, 'utf8', (err) => {
+        if (err) throw err;
+
+        console.log("Le fichier de configuration est créé.");
+    });
 });
+
