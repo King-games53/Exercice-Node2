@@ -38,32 +38,42 @@ args.protocol = args.protocol || 'http';
 const sampleConfigPathFile = path.join(__dirname, 'sample.config.json');
 const configPathFile = path.join(__dirname, 'config.json');
 
-fs.readFile(sampleConfigPathFile, 'utf8', (err, contentSampleFile) => {
-    if (err) throw err;
-    // First
-    // contentSampleFile = contentSampleFile.replace("PORT", args.port)
-    //     .replace("HOST", args.host)
-    //     .replace("PROTOCOL", args.protocol);
-    // console.log(contentSampleFile);
+fs.open(configPathFile, 'r', (err, fd) => {
+    if (err) {
+        if(err.code !== 'ENOENT') { }
+    } else {
+        console.log("Je supprime");
+        fs.unlinkSync(configPathFile);
+    }
 
-    // Second
-    // const objConfig = JSON.parse(contentSampleFile);
-    //
-    // objConfig.port = args.port;
-    // objConfig.host = args.host;
-    // objConfig.protocol = args.protocol;
-    //
-    // console.log(JSON.stringify(objConfig));
-
-    // Par tableau associatif ["port", "host", "protocol"]
-    Object.keys(args).forEach(key => {
-        contentSampleFile = contentSampleFile.replace(key.toUpperCase(), args[key])
-    });
-
-    fs.writeFile(configPathFile, contentSampleFile, 'utf8', (err) => {
+    console.log("Je crée");
+    fs.readFile(sampleConfigPathFile, 'utf8', (err, contentSampleFile) => {
         if (err) throw err;
+        // First
+        // contentSampleFile = contentSampleFile.replace("PORT", args.port)
+        //     .replace("HOST", args.host)
+        //     .replace("PROTOCOL", args.protocol);
+        // console.log(contentSampleFile);
 
-        console.log("Le fichier de configuration est créé.");
+        // Second
+        // const objConfig = JSON.parse(contentSampleFile);
+        //
+        // objConfig.port = args.port;
+        // objConfig.host = args.host;
+        // objConfig.protocol = args.protocol;
+        //
+        // console.log(JSON.stringify(objConfig));
+
+        // Par tableau associatif ["port", "host", "protocol"]
+        Object.keys(args).forEach(key => {
+            contentSampleFile = contentSampleFile.replace(key.toUpperCase(), args[key])
+        });
+
+        fs.writeFile(configPathFile, contentSampleFile, 'utf8', (err) => {
+            if (err) throw err;
+
+            console.log("Le fichier de configuration est créé.");
+        });
     });
 });
 
