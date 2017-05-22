@@ -1,0 +1,15 @@
+{
+  "name": "config-generator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js -p 8080 --host localhost",
+    "start:dev": "node index.js -p 8081 --host localhost"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "argparse": "^1.0.9"
+  }
+}
